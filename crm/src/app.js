@@ -12,7 +12,8 @@ import {
   } from 'react-native';
 import firebase from 'firebase';
 import Login from './Login';
-
+import Loader from './Loader';
+import PeopleList from './PeopleList'
 const styles = StyleSheet.create({
 container: {
     flex: 1,
@@ -23,6 +24,9 @@ container: {
 });
 
 export default class App extends Component {
+  state = {
+    loggedIn: null,
+  }
   componentWillMount() {
     firebase.initializeApp ({
       apiKey: "AIzaSyBpBkA6fJwSOreQ1ml_n5Zrez55EQ2IYDE",
@@ -32,11 +36,30 @@ export default class App extends Component {
       storageBucket: "crmlinkdin.appspot.com",
       messagingSenderId: "932098210961"
     });
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.setState({ loggedIn: true });
+      } else {
+        this.setState({ loggedIn: false });
+      }
+    });
   }
+
+  renderInitialView() {
+    switch (this.state.loggedIn){
+      case true:
+        return <PeopleList />;
+      case false:
+        return <Login />;
+      default:
+        return <Loader size="large" />;
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Login />
+        {this.renderInitialView()}
       </View>
     );
   }

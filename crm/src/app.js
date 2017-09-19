@@ -14,6 +14,7 @@ import firebase from 'firebase';
 import Login from './Login';
 import Loader from './Loader';
 import PeopleList from './PeopleList'
+
 const styles = StyleSheet.create({
 container: {
     flex: 1,
